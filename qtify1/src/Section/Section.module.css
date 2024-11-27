@@ -1,29 +1,24 @@
-.cardSection {
-    padding: 20px;
-    font-family: Poppins;
-    background-color: black;
-  }
-  
-  .header {
-width: 122px;
-height: 30px;
-font-family: Poppins;
-font-size: 20px;
-font-weight: 600;
-line-height: 30px;
-text-align: left;
-text-underline-position: from-font;
-text-decoration-skip-ink: none;
-color: #FFFFFF;
+.wrapper {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
 
-  }
-  
-  .albumsLayout {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-   
-  }
-  
- 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.toggleText {
+  cursor: pointer;
+  color: var(--color-primary);
+}
+
+.cardsWrapper {
+  margin-top: 18px;
+}
+
+.filterWrapper {
+  margin-top: 15px;
+}

@@ -1,51 +1,71 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import MusicCard from "../Card/Card";
-import styles from "../Section/Section.module.css"
+import { CircularProgress } from "@mui/material";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import Card from "../Card/Card";
+import Carousel from "../Carousal/Carousal";
+import Filters from "../Filters/Filters";
+import styles from "./Section.module.css";
 
-const DisplaySection=()=>{
-const [data,setData]=useState([])
+export default function Section({ title, data, filterSource, type }) {
+  const [filters, setFilters] = useState([{ key: "all", label: "All" }]);
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
+  const [carouselToggle, setCarouselToggle] = useState(true);
 
-const performAPICall = async () => {
-    try {
-      const response = await axios.get(`https://qtify-backend-labs.crio.do/albums/top`);
-      console.log(response.data)
-      setData(response.data)
-    } catch (error) {
-      
-      if (error.response) {
-        if (error.response.status === 500) {
-          console.log(error.response.data.message);
-        } else {
-          console.log("Something went wrong!");
-        }
-      } 
-    }
+  const handleToggle = () => {
+    setCarouselToggle((prevState) => !prevState);
   };
 
-useEffect(()=>performAPICall(),[])
-return (
-    <>
-      
-      {/* <Grid2 container columns={{ xs: 4, sm: 8, md: 12 }}>
-         <Box container sx={{ display: 'flex',direction:'row'}}>
-            {data.map((item) => (
-              <Grid2 item key={item.id} xs={12} sm={6} md={4}>
-                <MusicCard musicList={item} />
-              </Grid2>
-            ))}
-          </Box>
-      </Grid2> */}
-      <div className={styles.cardSection}>
-      <h1 className={styles.header}>Top Albums</h1>
-      <div className={styles.albumsLayout}>
-        {data.map(item => (
-          <MusicCard key={item.id} musicList={item} />
-        ))}
+  useEffect(() => {
+    if (filterSource) {
+      filterSource().then((response) => {
+        const { data } = response;
+        setFilters((prevFilters) => [...prevFilters, ...data]);
+      });
+    }
+  }, [filterSource]);
+
+  const showFilters = filters.length > 1; //true
+  const cardsToRender = data.filter((card) =>
+    showFilters && selectedFilterIndex !== 0
+      ? card.genre.key === filters[selectedFilterIndex].key
+      : card
+  );
+  console.log(data);
+  return (
+    <div>
+      <div className={styles.header}>
+        <h3>{title}</h3>
+        <h4 className={styles.toggleText} onClick={handleToggle}>
+          {!carouselToggle ? "Collapse All" : "Show All"}
+        </h4>
       </div>
+      {showFilters && (
+        <div className={styles.filterWrapper}>
+          <Filters
+            filters={filters}
+            selectedFilterIndex={selectedFilterIndex}
+            setSelectedFilterIndex={setSelectedFilterIndex}
+          />
+        </div>
+      )}
+      {data.length === 0 ? (
+        <CircularProgress />
+      ) : (
+        <div className={styles.cardsWrapper}>
+          {!carouselToggle ? (
+            <div className={styles.wrapper}>
+              {cardsToRender.map((ele) => (
+  <Card key={ele.id} data={ele} type={type} />
+))}
+            </div>
+          ) : (
+            <Carousel
+              data={cardsToRender}
+              renderComponent={(data) => <Card data={data} type={type} />}
+            />
+          )}
+        </div>
+      )}
     </div>
-    </>
   );
 }
-
-export default DisplaySection;

@@ -1,60 +1,59 @@
-import { AddShoppingCartOutlined } from "@mui/icons-material";
-import {
-  Button,
-  Card,
-  Chip,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Rating,
-  Typography,
-  Box
-} from "@mui/material";
+import { Chip, Tooltip } from "@mui/material";
 import React from "react";
-import styles from "../Card/Card.module.css"
+import { Link } from "react-router-dom";
+import styles from "./Card.module.css";
 
-const MusicCard = ({musicList,}) => {
-  // return (<Box sx={{ width: '25%',height:'25%' }}><Card className={styles.Card}>
-  //   <CardMedia
-  //       component="img"
-  //       image={musicList.image}
-  //       alt="song"
-  //       className={styles.cardImages}
-  //     />      
-  //  <CardContent>
-  //  <Chip label={`${musicList.follows} Follows`} color="primary" style={{backgroundColor:'black'}} />
-  //       <Typography gutterBottom variant="body2" component="div">
-  //         <h3>{musicList.title}</h3>
-  //       </Typography>
-  //     </CardContent>
-  //   </Card> 
-  //   </Box>
-  // );
-  return (
-    <div className={styles.cardsection}>
-      <Card className={styles.Card} sx={{ maxWidth: 345, backgroundColor: 'white', color: 'white' }}>
-        <CardMedia
-          component="img"
-          alt={musicList.title}
-          image={musicList.image}
-          sx={{ height: 200, objectFit: 'cover' }}
-        />
-        <CardContent sx={{ paddingBottom: 0 }}>
-          <Chip
-            label={`${musicList.follows} Follows`}
-            color="primary"
-            style={{ backgroundColor: 'black', fontSize: '14px' }}
-            sx={{
-              marginTop: 2,
-              padding: '4px 12px',
-              fontWeight: 'bold',
-            }}
-          />
-        </CardContent>    
-      </Card>
-      {musicList.title}
-    </div>
-  );
-};
+function Card({ data, type }) {
+  const getCard = (type) => {
+    switch (type) {
+      case "album": {
+        const { image, follows, title, slug, songs } = data;
+        return (
+          <Tooltip title={`${songs.length} songs`} placement="top" arrow>
+            <Link to={`/album/${slug}`}>
+              <div className={styles.wrapper}>
+                <div className={styles.card}>
+                  <img src={image} alt="album" loading="lazy" />
+                  <div className={styles.banner}>
+                    <Chip
+                      label={`${follows} Follows`}
+                      size="small"
+                      className={styles.chip}
+                    />
+                  </div>
+                </div>
+                <div className={styles.titleWrapper}>
+                  <p>{title}</p>
+                </div>
+              </div>
+            </Link>
+          </Tooltip>
+        );
+      }
+      case "song": {
+        const { image, likes, title } = data;
 
-export default MusicCard;
+        return (
+          <div className={styles.wrapper}>
+            <div className={styles.card}>
+              <img src={image} alt="song" loading="lazy" />
+              <div className={styles.banner}>
+                <div className={styles.pill}>
+                  <p>{likes} Likes</p>
+                </div>
+              </div>
+            </div>
+            <div className={styles.titleWrapper}>
+              <p>{title}</p>
+            </div>
+          </div>
+        );
+      }
+      default:
+        return <></>;
+    }
+  };
+  return getCard(type);
+}
+
+export default Card;

@@ -1,18 +1,22 @@
 .wrapper {
   width: 160px;
 }
-
+.innerwrapper{
+  background-color: white;
+  border-radius: 10px;
+}
 .card {
   position: relative;
   width: 160px;
   height: 205px;
   border-radius: 10px;
   overflow: hidden;
+  background-color: white;
   /* cursor: grab; */
 }
 
 .banner {
-  position: absolute;
+  position: relative;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -23,16 +27,8 @@
   padding: 6px;
 }
 
-.pill {
-  font-size: 12px;
-  background-color: var(--color-black);
-  width: max-content;
-  padding: 6px;
-  border-radius: 10px;
-}
-
 .titleWrapper {
-  margin-top: 6px;
+  /* margin-top: 6px; */
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
@@ -41,6 +37,7 @@
 }
 
 .chip {
-  background-color: var(--color-black);
+  background-color: #121212;
+  ;
   color: white;
 }

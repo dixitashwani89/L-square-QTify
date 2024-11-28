@@ -4,6 +4,7 @@ import { fetchFilters } from "../api/api";
 import Hero from "../Hero/Hero";
 import Section from "../Section/Section";
 import styles from "./Home.module.css";
+import Divider from '@mui/material/Divider';
 
 export default function HomePage() {
   const { data } = useOutletContext();
@@ -16,13 +17,16 @@ export default function HomePage() {
       <Hero />
       <div className={styles.wrapper}>
         <Section title="Top Albums" data={topAlbums} type="album" />
+        <Divider/>
         <Section title="New Albums" data={newAlbums} type="album" />
+        <Divider/>
         <Section
           title="Songs"
           data={songs}
           filterSource={fetchFilters}
           type="song"
         />
+        <Divider/>
       </div>
     </>
   );
